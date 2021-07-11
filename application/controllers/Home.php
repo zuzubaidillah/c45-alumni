@@ -123,19 +123,18 @@ class Home extends CI_Controller
 
                     //#4# Insert jumlah kasus total, jumlah kasus berhasil dan jumlah kasus tdk berhasil ke DB
                     // insert ke database mining_c45
-                    // $sql = "INSERT INTO mining_c45 VALUES (NULL, 'Total', 'Total', '$getJumlahKasusTotal', '$getJumlahKasusberhasil', '$getJumlahKasusbelumberhasil', '', '', '', '', '', '')";
                     $data = [
                         'atribut' => 'Total',
                         'nilai_atribut' => 'Total',
                         'jml_kasus_total' => $getJumlahKasusTotal,
                         'jml_berhasil' => $getJumlahKasusberhasil,
                         'jml_belum_berhasil' => $getJumlahKasusbelumberhasil,
-                        'entropy' => '',
-                        'inf_gain' => '',
-                        'inf_gain_temp' => '',
-                        'split_info' => '',
-                        'split_info_temp' => '',
-                        'gain_ratio' => ''
+                        'entropy' => 0,
+                        'inf_gain' => 0,
+                        'inf_gain_temp' => 0,
+                        'split_info' => 0,
+                        'split_info_temp' => 0,
+                        'gain_ratio' => 0
                     ];
                     echo "<pre>";
                     print_r($data);
@@ -189,19 +188,18 @@ class Home extends CI_Controller
 
                             //#6# Insert jumlah kasus total, jumlah kasus berhasil dan jumlah kasus belum berhasil masing2 atribut ke DB
                             // insert ke database mining_c45
-                            // "INSERT INTO mining_c45 VALUES (NULL, '$getAtribut', '$getNilaiAtribut', '$getJumlahKasusTotalAtribut', '$getJumlahKasusberhasilAtribut', '$getJumlahKasusbelumberhasilAtribut', '', '', '', '', '', '')";
                             $data = [
                                 'atribut' => $getAtribut, //SESUAI NAMA KOLOM
                                 'nilai_atribut' => $getNilaiAtribut,
                                 'jml_kasus_total' => $getJumlahKasusTotalAtribut,
                                 'jml_berhasil' => $getJumlahKasusberhasilAtribut,
                                 'jml_belum_berhasil' => $getJumlahKasusbelumberhasilAtribut,
-                                'entropy' => '',
-                                'inf_gain' => '',
-                                'inf_gain_temp' => '',
-                                'split_info' => '',
-                                'split_info_temp' => '',
-                                'gain_ratio' => ''
+                                'entropy' => 0,
+                                'inf_gain' => 0,
+                                'inf_gain_temp' => 0,
+                                'split_info' => 0,
+                                'split_info_temp' => 0,
+                                'gain_ratio' => 0
                             ];
                             echo "<pre>";
                             print_r($data);
@@ -216,14 +214,17 @@ class Home extends CI_Controller
                             $rowEntropy = $this->M_model->get_kolom_tabel($sqlEntropy);
                             $countEntropy = $this->M_model->count_kolom_tabel($sqlEntropy);
                             
-                            echo "<pre>";
-                            print_r($rowEntropy);
-                            echo "</pre>";
-                            // die();
+                            // echo "countEntropy ".$countEntropy."<pre>";
+                            // print_r($rowEntropy);
+                            // echo "</pre>";
+                            // if ($norowNilaiAtribut>=9) {
+                            //     // die();
+                            // }
 
                             if ($rowEntropy !== 0) {
                                 $norowEntropy = 0;
                                 foreach ($rowEntropy as $kEntropy) {
+                                    // die();
                                     $norowEntropy++;
                                     echo 'rowEntropy ' . $norowEntropy;
                                     echo "<br>";
@@ -272,7 +273,7 @@ class Home extends CI_Controller
                             $sqlJumlahKasusTotalInfGain = "SELECT jml_kasus_total, entropy FROM mining_c45 WHERE atribut = 'Total'";
                             $rowJumlahKasusTotalInfGain = $this->M_model->get_kolom_tabel($sqlJumlahKasusTotalInfGain);
                             
-                            echo "<pre>";
+                            echo "rowJumlahKasusTotalInfGain <pre>";
                             print_r($rowJumlahKasusTotalInfGain);
                             echo "</pre>";
                             // die();
@@ -302,10 +303,12 @@ class Home extends CI_Controller
                             $sqlAtributInfGain = "SELECT inf_gain_temp, id FROM mining_c45 WHERE atribut = '$getAtribut'";
                             $rowAtributInfGainNo = $this->M_model->get_kolom_tabel($sqlAtributInfGain);
                             
-                            echo "<pre>";
+                            echo "error <pre>";
                             print_r($rowAtributInfGain);
                             echo "</pre>";
                             echo '$getAtribut -> '.$getAtribut;
+                            echo "<br>";
+                            echo "<br>";
                             // die();
 
                             if ($rowAtributInfGain !== 0) {
@@ -380,6 +383,8 @@ class Home extends CI_Controller
                                 $norowAtributInfGain = 0;
                                 foreach ($rowAtributSplitInfo as $kAtributSplitInfo) {
                                     $norowAtributInfGain++;
+                                    echo "<br>";
+                                    echo "<br>";
                                     echo 'rowAtributSplitInfo ' . $norowAtributInfGain;
                                     echo "<br>";
                                     echo "<br>";
@@ -412,16 +417,16 @@ class Home extends CI_Controller
                     $rowGainRatio = $this->M_model->get_kolom_tabel($sqlGainRatio);
                     $countGainRatio = $this->M_model->count_kolom_tabel($sqlGainRatio);
 
-                    echo "1234<pre>";
+                    echo "rowGainRatioCount ".$countGainRatio."<pre>";
                     print_r($rowGainRatio);
                     echo "</pre>";
-                    // die();
-
+                    
                     if ($rowGainRatio !== 0) {
                         $norowGainRatio = 0;
+                        // die();
                         foreach ($rowGainRatio as $kGainRatio) {
                             $norowGainRatio++;
-                            echo 'rowGainRatio ' . $norowGainRatio;
+                            echo 'rowGainRatio2 ' . $norowGainRatio;
                             echo "<br>";
                             echo "<br>";
                             $idGainRatio = $kGainRatio->id;
@@ -431,6 +436,7 @@ class Home extends CI_Controller
                             } else {
                                 // rumus gain ratio
                                 $getGainRatio = round(($kGainRatio->inf_gain / $kGainRatio->split_info), 4);
+                                // var_dump($getGainRatio);die();
                             }
 
                             //#16# Update gain ratio dari setiap atribut
@@ -438,7 +444,7 @@ class Home extends CI_Controller
                             $data = [
                                 'gain_ratio' => $getGainRatio
                             ];
-                            echo "<pre>";
+                            echo "1212<pre>";
                             print_r($data);
                             echo "</pre>";
                             echo "<br>";
@@ -544,7 +550,6 @@ class Home extends CI_Controller
                                 echo "<br>";
                                 echo "<br>";
                                 // insert ke tabel pohon keputusan
-                                // "INSERT INTO pohon_keputusan_c45 VALUES (NULL, '$kIdParent->atribut', '$kIdParent->nilai_atribut', $rowIdParent->id, '$kIdParent->jml_berhasil', '$kIdParent->jml_belum_berhasil', '$keputusan', 'Belum', '', 'Belum')";
                                 $data = [
                                     'atribut' => $kInfGainMax->atribut,
                                     'nilai_atribut' => $kInfGainMax->nilai_atribut,
@@ -568,6 +573,9 @@ class Home extends CI_Controller
                                 // hitung Pessimistic error rate parent dan child
                                 $perhitunganParentPrePruning = $this->loopingPerhitunganPrePruning($kIdParent->jml_berhasil, $kIdParent->jml_belum_berhasil);
                                 $perhitunganChildPrePruning = $this->loopingPerhitunganPrePruning($kInfGainMax->jml_berhasil, $kInfGainMax->jml_belum_berhasil);
+                                echo "#PRE PRUNING <br>";
+                                echo $perhitunganParentPrePruning ." ".$perhitunganChildPrePruning;
+                                echo "<br>";
 
                                 // hitung average Pessimistic error rate child
                                 $perhitunganPessimisticChild = (($kInfGainMax->jml_berhasil + $kInfGainMax->jml_belum_berhasil) / ($kIdParent->jml_berhasil + $kIdParent->jml_belum_berhasil)) * $perhitunganChildPrePruning;
@@ -856,35 +864,36 @@ class Home extends CI_Controller
         $rowReplaceNull = $this->M_model->get_kolom_tabel($sqlReplaceNull);
         $countReplaceNull = $this->M_model->count_kolom_tabel($sqlReplaceNull);
 
-        echo "loopingMiningC45 <pre>";
-        print_r($rowReplaceNull);
-        echo "</pre>";
+        // echo "loopingMiningC45 <pre>";
+        // print_r($rowReplaceNull);
+        // echo "</pre>";
         // die();
 
         if ($rowReplaceNull !== 0) {
             $norowReplaceNull = 0;
             foreach ($rowReplaceNull as $kReplaceNull) {
-                $norowReplaceNull++;
-                echo 'rowReplaceNull ' . $norowReplaceNull;
-                echo "<br>";
-                echo "<br>";
-                $sqlReplaceNullIdParent = "SELECT jml_berhasil, jml_belum_berhasil, keputusan FROM pohon_keputusan_c45 WHERE id = $kReplaceNull->id_parent";
-                $rowReplaceNullIdParent = $this->M_model->get_kolom_tabel($sqlReplaceNullIdParent);
-                if ($rowReplaceNullIdParent[0]->jml_berhasil > $rowReplaceNullIdParent[0]->jml_belum_berhasil) {
-                    $keputusanNull = 'berhasil'; // jika jml_berhasil != 0 dan jml_belum_berhasil = 0, maka keputusan berhasil
-                } else if ($rowReplaceNullIdParent[0]->jml_berhasil < $rowReplaceNullIdParent[0]->jml_belum_berhasil) {
-                    $keputusanNull = 'belum berhasil'; // jika jml_berhasil = 0 dan jml_belum_berhasil != 0, maka keputusan Tidak berhasil
-                }
+                // $norowReplaceNull++;
+                // echo 'rowReplaceNull ' . $norowReplaceNull;
+                // echo "<br>";
+                // echo "<br>";
+                // $sqlReplaceNullIdParent = "SELECT jml_berhasil, jml_belum_berhasil, keputusan FROM pohon_keputusan_c45 WHERE id = $kReplaceNull->id_parent";
+                // $rowReplaceNullIdParent = $this->M_model->get_kolom_tabel($sqlReplaceNullIdParent);
+                // if ($rowReplaceNullIdParent[0]->jml_berhasil > $rowReplaceNullIdParent[0]->jml_belum_berhasil) {
+                //     $keputusanNull = 'berhasil'; // jika jml_berhasil != 0 dan jml_belum_berhasil = 0, maka keputusan berhasil
+                // } else if ($rowReplaceNullIdParent[0]->jml_berhasil < $rowReplaceNullIdParent[0]->jml_belum_berhasil) {
+                //     $keputusanNull = 'belum berhasil'; // jika jml_berhasil = 0 dan jml_belum_berhasil != 0, maka keputusan Tidak berhasil
+                // }
                 // "UPDATE pohon_keputusan_c45 SET keputusan = '$keputusanNull' WHERE id = $kReplaceNull->id";
-                $data = [
-                    'keputusan' => $keputusanNull
-                ];
-                echo "<pre>";
-                print_r($data);
-                echo "</pre>";
-                echo "<br>";
-                echo "<br>";
-                $this->M_model->editdata('pohon_keputusan_c45', $data, 'id', $kReplaceNull->id);
+                // $data = [
+                //     'keputusan' => $keputusanNull
+                // ];
+                // echo "<pre>";
+                // print_r($data);
+                // echo "</pre>";
+                // echo "<br>";
+                // echo "<br>";
+                // $this->M_model->editdata('pohon_keputusan_c45', $data, 'id', $kReplaceNull->id);
+
             }
         }
     }
@@ -894,6 +903,12 @@ class Home extends CI_Controller
     {
         $rumus = ($r + (($z * $z) / (2 * $n)) + ($z * (sqrt(($r / $n) - (($r * $r) / $n) + (($z * $z) / (4 * ($n * $n))))))) / (1 + (($z * $z) / $n));
         $rumus = round($rumus, 4);
+        echo "<br>";
+        echo "-rumus- <pre>";
+        print_r($rumus);
+        echo "</pre>";
+        echo "<br>";
+        echo "<br>";
         return $rumus;
     }
 
@@ -913,8 +928,28 @@ class Home extends CI_Controller
             $r = round($r, 4);
             return $this->perhitunganPrePruning($r, $z, $n);
         } elseif ($positif == $negatif) {
-            $r = $negatif / ($n);
-            $r = round($r, 4);
+            print_r($negatif);
+            echo "<br>";
+            echo "--- <pre>";
+            print_r($n);
+            echo "</pre>";
+            echo "<br>";
+            echo "<br>";
+            if ($negatif==0) {
+                if ($n==0) {
+                    // var_dump('ssss');die();
+                    $r = 10;
+                    return 0;
+                    exit();
+                }else{
+                    $r = $negatif / ($n);
+                    $r = round($r, 4);
+                }
+            }else{
+                $r = $negatif / ($n);
+                $r = round($r, 4);
+            }
+            
             return $this->perhitunganPrePruning($r, $z, $n);
         }
     }
